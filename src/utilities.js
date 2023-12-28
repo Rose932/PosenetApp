@@ -220,4 +220,3 @@ function drawPoints(ctx, points, radius, color) {
   }
 }
 
-

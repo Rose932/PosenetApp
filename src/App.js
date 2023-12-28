@@ -1,14 +1,24 @@
+// 1. Install dependencies DONE
+// 2. Import dependencies DONE
+// 3. Setup webcam and canvas DONE
+// 4. Define references to those DONE
+// 5. Load posenet DONE
+// 6. Detect function DONE
+// 7. Drawing utilities from tensorflow DONE
+// 8. Draw functions DONE
+
 import React, { useRef } from "react";
 import "./App.css";
+// import * as tf from "@tensorflow/tfjs";
 import * as posenet from "@tensorflow-models/posenet";
 import Webcam from "react-webcam";
-import { drawKeypoints , drawSkeleton } from "./utilities";
-import { DepthwiseConv2dNative } from "@tensorflow/tfjs";
+import { drawKeypoints, drawSkeleton } from "./utilities";
 
 function App() {
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
-z  // Load posenet
+
+  //  Load posenet
   const runPosenet = async () => {
     const net = await posenet.load({
       inputResolution: { width: 640, height: 480 },
@@ -16,16 +26,15 @@ z  // Load posenet
     });
     //
     setInterval(() => {
-      DepthwiseConv2dNative(net);
+      detect(net);
     }, 100);
   };
 
-  // Detect the key points on the person
   const detect = async (net) => {
     if (
       typeof webcamRef.current !== "undefined" &&
       webcamRef.current !== null &&
-      webcamRef.current.video.readyState ===4
+      webcamRef.current.video.readyState === 4
     ) {
       // Get Video Properties
       const video = webcamRef.current.video;
@@ -42,12 +51,9 @@ z  // Load posenet
 
       drawCanvas(pose, video, videoWidth, videoHeight, canvasRef);
     }
-  
-  }
+  };
 
-  // Draw the key points on the canvas
-
-const drawCanvas = (pose, video, videoWidth, videoHeight, canvas) => {
+  const drawCanvas = (pose, video, videoWidth, videoHeight, canvas) => {
     const ctx = canvas.current.getContext("2d");
     canvas.current.width = videoWidth;
     canvas.current.height = videoHeight;
@@ -58,11 +64,12 @@ const drawCanvas = (pose, video, videoWidth, videoHeight, canvas) => {
 
   runPosenet();
 
-  // Return JSX
   return (
     <div className="App">
       <header className="App-header">
-        <Webcam ref={webcamRef} style={{
+        <Webcam
+          ref={webcamRef}
+          style={{
             position: "absolute",
             marginLeft: "auto",
             marginRight: "auto",
@@ -75,7 +82,9 @@ const drawCanvas = (pose, video, videoWidth, videoHeight, canvas) => {
           }}
         />
 
-        <canvas ref={canvasRef} style={{
+        <canvas
+          ref={canvasRef}
+          style={{
             position: "absolute",
             marginLeft: "auto",
             marginRight: "auto",
@@ -90,6 +99,6 @@ const drawCanvas = (pose, video, videoWidth, videoHeight, canvas) => {
       </header>
     </div>
   );
-
-  
 }
+
+export default App;
